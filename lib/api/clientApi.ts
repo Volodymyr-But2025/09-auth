@@ -72,9 +72,8 @@ export const login = async (userData: RegisterPayload): Promise<User> => {
 
 export const checkSession = async (): Promise<boolean> => {
   try {
-    const { data } = await nextServerInstance.get<CheckSessionResponse>(
-      "/auth/session",
-    );
+    const { data } =
+      await nextServerInstance.get<CheckSessionResponse>("/auth/session");
     return data.success === true;
   } catch {
     return false;
@@ -82,7 +81,7 @@ export const checkSession = async (): Promise<boolean> => {
 };
 
 export const getMe = async (): Promise<User> => {
-  const { data } = await nextServerInstance.get<User>("/auth/me");
+  const { data } = await nextServerInstance.get<User>("/users/me");
   return data;
 };
 

@@ -25,7 +25,7 @@ export async function proxy(req: NextRequest) {
 
   if (accessToken) {
     if (isPublicRoute) {
-      return NextResponse.redirect(new URL("/profile", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
     return NextResponse.next();
   }
@@ -41,7 +41,7 @@ export async function proxy(req: NextRequest) {
       const body = await sessionRes.json();
       if (body?.success) {
         if (isPublicRoute) {
-          return NextResponse.redirect(new URL("/profile", req.url));
+          return NextResponse.redirect(new URL("/", req.url));
         }
 
         const response = NextResponse.next();

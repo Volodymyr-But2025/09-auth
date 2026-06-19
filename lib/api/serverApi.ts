@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { nextServerInstance } from "./api";
+import type { AxiosResponse } from "axios";
 import { FetchNotesResponse } from "./clientApi";
 import { Note } from "@/types/note";
 import { User } from "@/types/user";
@@ -47,17 +48,11 @@ export const getMe = async (): Promise<User> => {
   return data;
 };
 
-export const checkSession = async (): Promise<boolean> => {
-  try {
-    const cs = await cookies();
-    const { data } = await nextServerInstance.get<CheckSessionResponse>(
-      "/auth/session",
-      {
-        headers: { Cookie: cs.toString() },
-      },
-    );
-    return data.success === true;
-  } catch {
-    return false;
-  }
+export const checkSession = async (): Promise<
+  AxiosResponse<CheckSessionResponse>
+> => {
+  const cs = await cookies();
+  return nextServerInstance.get<CheckSessionResponse>("/auth/session", {
+    headers: { Cookie: cs.toString() },
+  });
 };

@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { getMe } from "@/lib/api/serverApi";
 import css from "./ProfilePage.module.css";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Profile Page",
   description: "View your Notehub profile and edit your account details.",
   openGraph: {
