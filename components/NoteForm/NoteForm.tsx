@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import css from "./NoteForm.module.css";
 import { useEffect, useId, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { createNote, type CreateNotePayload } from "@/lib/api";
+import { createNote, type CreateNotePayload } from "@/lib/api/clientApi";
 import { initialDraft, useNoteStore } from "@/lib/store/noteStore";
 import type { NoteTag } from "@/types/note";
 

@@ -48,7 +48,7 @@
 
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchNoteById } from "@/lib/api"; // Імпортуємо функцію запиту за ID
+import { fetchNoteById } from "@/lib/api/clientApi"; // Імпортуємо функцію запиту за ID
 import Modal from "@/components/Modal/Modal";
 import css from "./NotePreview.module.css";
 

@@ -113,7 +113,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { fetchNotes, type FetchNotesResponse } from "@/lib/api";
+import { fetchNotes, type FetchNotesResponse } from "@/lib/api/clientApi";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
