@@ -55,9 +55,7 @@ export async function proxy(req: NextRequest) {
         const setCookieHeader = sessionRes.headers.get("set-cookie");
 
         if (setCookieHeader) {
-          const cookieStrings =
-            sessionRes.headers.getAll?.("set-cookie") ??
-            splitSetCookieHeader(setCookieHeader);
+          const cookieStrings = splitSetCookieHeader(setCookieHeader);
 
           for (const cookieString of cookieStrings) {
             const parsed = parse(cookieString);
