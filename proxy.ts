@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { parse } from "cookie";
 
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
 const isRouteMatch = (pathname: string, route: string) =>
   pathname === route || pathname.startsWith(`${route}/`);
+
+const splitSetCookieHeader = (header: string) =>
+  header
+    .split(/,(?=\s*[^=;]+=)/)
+    .map((cookie) => cookie.trim())
+    .filter(Boolean);
 
 export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
@@ -45,10 +52,38 @@ export async function proxy(req: NextRequest) {
         }
 
         const response = NextResponse.next();
-        const setCookie = sessionRes.headers.get("set-cookie");
-        if (setCookie) {
-          response.headers.set("set-cookie", setCookie);
+        const setCookieHeader = sessionRes.headers.get("set-cookie");
+
+        if (setCookieHeader) {
+          const cookieStrings =
+            sessionRes.headers.getAll?.("set-cookie") ??
+            splitSetCookieHeader(setCookieHeader);
+
+          for (const cookieString of cookieStrings) {
+            const parsed = parse(cookieString);
+            const cookieName = Object.keys(parsed).find(
+              (name) => name === "accessToken" || name === "refreshToken",
+            );
+            if (!cookieName) continue;
+
+            const cookieValue = parsed[cookieName];
+            if (!cookieValue) continue;
+
+            response.cookies.set(cookieName, cookieValue, {
+              path: parsed.Path ?? "/",
+              expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+              maxAge: parsed["Max-Age"] ? Number(parsed["Max-Age"]) : undefined,
+              httpOnly: /httponly/i.test(cookieString),
+              secure: /secure/i.test(cookieString),
+              sameSite: parsed.SameSite as
+                | "strict"
+                | "lax"
+                | "none"
+                | undefined,
+            });
+          }
         }
+
         return response;
       }
     }
